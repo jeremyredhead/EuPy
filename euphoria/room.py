@@ -2,6 +2,7 @@ from . import connection
 from . import executable
 
 import time
+import random
 
 class Room(executable.Executable):
     """
@@ -127,7 +128,7 @@ class Room(executable.Executable):
                             self.cleanup()
 
                         attempts += 1
-                        time.sleep(5 * (2 ** (attempts - 1)))
+                        time.sleep(5 * (2 ** (attempts - 1)) * random.uniform(0.5, 1.5))
 
                     self.join()
                     self.identify()
