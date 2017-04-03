@@ -15,6 +15,7 @@ class Connection:
 
         self.socket = None
         self.room = ""
+        self.connected = False
 
         self.idcounter = 0
 
@@ -27,6 +28,11 @@ class Connection:
 
         #Thread stuff
         self.lock = threading.RLock()
+
+        #Set self.connected when we receive a snapshot-event
+        def set_connected(packet):
+            self.connected = True
+        self.add_callback("snapshot-event", set_connected)
 
     def add_callback(self, ptype, callback):
         """
@@ -49,6 +55,7 @@ class Connection:
         """
 
         self.room = room
+        self.connected = False
 
         url = "wss://%s/room/%s/ws" % (self.site, self.room)
 

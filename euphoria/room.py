@@ -107,6 +107,7 @@ class Room(executable.Executable):
 
         first_attempt = True
         attempts = 0
+        received_data = False
 
         while self.running:
             #Check for multiple failures in a row
@@ -117,18 +118,21 @@ class Room(executable.Executable):
             #Receive data and handle connection errors
             try:
                 if self.connection.receive_data():
-                    attempts = 0
+                    received_data = True
+                    if self.connection.connected:
+                        attempts = 0
                 else:
                     #No connection initialized
                     if first_attempt:
                         first_attempt = False
                     else:
                         #Just disconnected
-                        if attempts == 0:
+                        if received_data:
                             self.cleanup()
 
                         attempts += 1
-                        time.sleep(5 * (2 ** (attempts - 1)) * random.uniform(0.5, 1.5))
+                        received_data = False
+                        time.sleep(10 * (2 ** (attempts - 1)) * random.uniform(1.0, 1.5))
 
                     self.join()
                     self.identify()
