@@ -10,7 +10,7 @@ class Connection:
     receiving packets.
     """
 
-    def __init__(self, limit=0, site="euphoria.io"):
+    def __init__(self, limit=0, site="euphoria.leet.nu"):
         self.site = site
 
         self.socket = None
